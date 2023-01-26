@@ -10,24 +10,23 @@ import CustomSidebarMenu from "../screens/CustomSidebarMenu";
 const Drawer = createDrawerNavigator();
 
 export default class DrawerNavigator extends Component{
-    constructor(props) {
-        super(props);
-        this.state={
-            light_theme: true,
-        }
+  constructor (props) {
+    super(props);
+    this.state={
+      light_theme: true,
     }
-
+  }
     componentDidMount() {
         let theme;
         firebase
-        .database
+        .database()
         .ref("/users/" + firebase.auth().currentUser.uid)
         .on("value", function (snapshot) {
             theme = snapshot.val().current_theme;
         });
-        this.setState({light_theme : themme === "light" ? true: false })
+        this.setState({light_theme : theme === "light" ? true: false})
     }
-    render() {
+    render () {
         let props = this.props;
         return (
             <Drawer.Navigator
@@ -38,7 +37,7 @@ export default class DrawerNavigator extends Component{
           headerShown: false 
         }}
         drawerContent={props => <CustomSidebarMenu {...props} />}
-
+       
       >
         <Drawer.Screen
           name="Home"
@@ -55,11 +54,10 @@ export default class DrawerNavigator extends Component{
           component={Logout}
           options={{ unmountOnBlur: true }}
         />
-        
-
-            </Drawer.Navigator>
+      </Drawer.Navigator>
         );
     }
 };
+
 
 
